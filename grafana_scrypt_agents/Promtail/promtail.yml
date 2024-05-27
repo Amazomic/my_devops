@@ -1,0 +1,20 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: C:\Promtail\positions.yaml
+
+clients:
+  - url: http://192.168.20.96:3100/loki/api/v1/push
+
+scrape_configs:
+
+  - job_name: windows_services_logs
+    static_configs:
+      - targets: ['localhost']
+        labels:
+          job: windows_services_logs
+          env: production
+          windows_services_logs_query: '*'
+
