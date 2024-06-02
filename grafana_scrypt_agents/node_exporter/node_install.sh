@@ -49,7 +49,7 @@ After=network.target
 
 [Service]
 User=root
-ExecStart=$NODE_EXPORTER_BIN_DIR/node_exporter
+ExecStart=$NODE_EXPORTER_BIN_DIR/node_exporter --collector.processes --collector.systemd 
 
 [Install]
 WantedBy=multi-user.target" | sudo tee $SYSTEMD_DIR/$SERVICE_NAME.service > /dev/null
