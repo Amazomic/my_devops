@@ -95,6 +95,14 @@ sudo systemctl enable promtail
 echo "Запуск службы Promtail..."
 sudo systemctl start promtail
 
+# Проверка статуса службы Promtail
+status=$(sudo systemctl is-active promtail)
+if [ "$status" = "active" ]; then
+  echo "Служба Promtail успешно запущена и активна."
+else
+  echo "Ошибка: Служба Promtail не активна. Статус: $status"
+fi
+
 # Очистка временных файлов
 echo "Очистка временных файлов..."
 rm -rf $TEMP_DIR
