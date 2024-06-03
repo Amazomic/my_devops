@@ -64,6 +64,8 @@ scrape_configs:
     relabel_configs:
       - source_labels: ['__journal__systemd_unit']
         target_label: 'systemd'  
+      - action: labeldrop
+        regex: "filename|service_name"   
 " | sudo tee $CONFIG_FILE > /dev/null
 
 # Создание файла службы
