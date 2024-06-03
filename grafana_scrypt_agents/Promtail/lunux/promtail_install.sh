@@ -60,12 +60,10 @@ clients:
 scrape_configs:
   - job_name: systemd_journal
     journal:
-      max_age: 12h
+      max_age: 24h
     relabel_configs:
       - source_labels: ['__journal__systemd_unit']
-        target_label: 'unit'
-      - target_label: 'host'
-        replacement: '${HOSTNAME}'      
+        target_label: 'systemd'  
 " | sudo tee $CONFIG_FILE > /dev/null
 
 # Создание файла службы
