@@ -63,9 +63,7 @@ scrape_configs:
       max_age: 24h
     relabel_configs:
       - source_labels: ['__journal__systemd_unit']
-        target_label: 'systemd'  
-      - action: labeldrop
-        regex: "filename|service_name"   
+        target_label: 'service_name'  
 " | sudo tee $CONFIG_FILE > /dev/null
 
 # Создание файла службы
