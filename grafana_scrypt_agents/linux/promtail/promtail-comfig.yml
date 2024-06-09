@@ -9,7 +9,6 @@ clients:
   - url: http://192.168.20.96:3100/loki/api/v1/push
 
 scrape_configs:
-  # Scrape logs from Docker containers
   - job_name: docker
     docker_sd_configs:
       - host: unix:///var/run/docker.sock
@@ -26,12 +25,4 @@ scrape_configs:
           expression: ".*invalid character.*"
     relabel_configs:
       - source_labels: ['__meta_docker_container_name']
-        target_label: 'container'
       - target_label: 'host'
-        replacement: "linux_agents.191:9080"
-      - source_labels: ['__meta_docker_container_label_io_kubernetes_pod_namespace']
-        action: replace
-        target_label: 'namespace'
-      - source_labels: ['__meta_docker_container_label_io_kubernetes_pod_name']
-        action: replace
-        target_label: 'pod'
