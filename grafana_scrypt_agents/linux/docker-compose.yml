@@ -11,7 +11,7 @@ services:
       HOST: "grafana.96"
     ports:
       - "9080:9080"
-      - "3100:3100"  
+      - "3100:3100"
     networks:
       - monitoring
 
