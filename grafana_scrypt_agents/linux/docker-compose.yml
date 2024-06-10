@@ -5,12 +5,13 @@ services:
     image: grafana/promtail:latest
     volumes:
       - /var/log:/var/log
-      - /tmp/positions.yaml:/tmp/positions.yaml
-      - ./promtail-config.yaml:/etc/promtail/config.yaml
-    command: -config.file=/etc/promtail/promtail-config.yaml
+      - ./promtail-config.yaml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    environment:
+      HOST: "grafana.96"
     ports:
       - "9080:9080"
-      - "3100:3100"  # Добавлен порт 3100
+      - "3100:3100"  
     networks:
       - monitoring
 
@@ -18,6 +19,7 @@ services:
     image: prom/node-exporter:latest
     ports:
       - "9100:9100"
+    command: ["--collector.systemd"]
     networks:
       - monitoring
 
