@@ -18,6 +18,9 @@ TEMP_DIR="/tmp/promtail_install"
 CONFIG_DIR="/etc/loki"
 CONFIG_FILE="$CONFIG_DIR/promtail_config.yml"
 
+# Запрашиваем имя хоста
+read -p "Введите имя хоста (например, docker_builds.99): " HOSTNAME
+
 echo "Проверка наличия и остановка службы Promtail, если она существует и запущена."
 
 # Проверка наличия и остановка службы Promtail, если она существует и запущена
@@ -66,8 +69,8 @@ scrape_configs:
     relabel_configs:
       - source_labels: ['__journal__systemd_unit']
         target_label: 'service_name'
-      - replacement: "docker_builds.99:9080"
-        target_label: "host"
+      - replacement: ${HOSTNAME}:9080
+        target_label: 'host'
 
   - job_name: docker_logs
     pipeline_stages:
@@ -78,8 +81,8 @@ scrape_configs:
     relabel_configs:
       - source_labels: [__meta_docker_container_name]
         target_label: service_name
-      - replacement: "docker_builds.99:9080"
-        target_label: "host"
+      - replacement: ${HOSTNAME}:9080
+        target_label: 'host'
 " | sudo tee $CONFIG_FILE > /dev/null
 
 # Создание файла службы
