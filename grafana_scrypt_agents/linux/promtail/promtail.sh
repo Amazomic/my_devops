@@ -50,12 +50,14 @@ echo "Создание файла конфигурации: $CONFIG_FILE"
 echo "server:
   http_listen_port: 9080
   grpc_listen_port: 0
+  grpc_server_max_recv_msg_size: 104857600 
+  grpc_server_max_send_msg_size: 104857600 
 
 positions:
   filename: /tmp/positions.yaml
 
 clients:
-  - url: http://$LOKI_SERVER_URL:3100/loki/api/v1/push
+  - url: http://192.168.20.96:3100/loki/api/v1/push
 
 scrape_configs:
   - job_name: systemd_journal
@@ -63,7 +65,21 @@ scrape_configs:
       max_age: 24h
     relabel_configs:
       - source_labels: ['__journal__systemd_unit']
-        target_label: 'service_name'  
+        target_label: 'service_name'
+      - replacement: "docker_builds.99:9080"
+        target_label: "host"
+
+  - job_name: docker_logs
+    pipeline_stages:
+      - docker: {}
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+    relabel_configs:
+      - source_labels: [__meta_docker_container_name]
+        target_label: service_name
+      - replacement: "docker_builds.99:9080"
+        target_label: "host"
 " | sudo tee $CONFIG_FILE > /dev/null
 
 # Создание файла службы
